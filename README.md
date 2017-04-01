@@ -17,7 +17,7 @@ In this schedule, team 1100 is in match 1 and match 4. In this case, when match 
 
 We also want to note that team 1100 has to switch alliance colors between matches 1 and 4 (Red to Blue). This is something we would want to notify them about, in case they need to switch bumpers.
 
-From this program, we can generate an updated schedule that notes all this information to make queuing easier, and to remove the manual work for marking each back-to-back match.
+This program pulls the match schedule from [The Blue Alliance](https://www.thebluealliance.com/) and generates an updated schedule that notes all the information to make queuing easier and eliminate the manual work of marking each back-to-back match.
 
 We can note all back-to-back matches that are 3 matches out, as shown in the example above, or 4 matches out. With 4 matches out, we can stage these teams near the field and move them up as needed, if the travel time to the pits is too far to send them back, such as championships.
 

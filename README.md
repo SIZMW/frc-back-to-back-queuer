@@ -37,7 +37,7 @@ python frc_back_to_back_queuer.py -i <event ID> -o <output file> -m <match count
 
 The arguments are:
 
-* `event ID` : The event ID from [The Blue Alliance](https://www.thebluealliance.com/apidocs).
+* `event ID` : The __Event Model__ *key* from [The Blue Alliance](https://www.thebluealliance.com/apidocs), in the form of `yyyy[EVENT_CODE]`. For example, `2017mawor` for the [2017 WPI District event](https://www.thebluealliance.com/event/2017mawor).
 * `output file` : The file path to write the generated schedule, as a TSV file.
 * `match count` : The number of matches to consider for "back-to-back". This is commonly __4__ matches for most events.
 

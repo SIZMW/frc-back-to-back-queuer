@@ -4,7 +4,7 @@ FRC Queuing: Back-To-Back Match Finder
 ## Description
 This program can be used to find and mark back-to-back matches in the qualification match schedule for a specific FRC event.
 
-For queuing, it's important to track teams that have back-to-back matches to keep the match flow running smoothly, and to prevent teams from leaving the field if they are needed back in the match queue. Most events will keep at least 2 matches queued behind the match currently playing, which is where this program fits in, and some will keep 3 matches if the distance to the pits is too far. An example of a qualification schedule is shown below:
+For queuing, it's important to track teams that have back-to-back matches to keep the match flow running smoothly, and to prevent teams from leaving the field if they are needed back in the match queue. Most events will keep at least 2 matches queued behind the match currently playing, and some will keep 3 matches if the distance to the pits is too far. An example of a qualification schedule is shown below:
 
 | Match Number | Blue 1 | Blue 2 | Blue 3 | Red 1 | Red 2 | Red 3 |
 |--------------|--------|--------|--------|-------|-------|-------|
@@ -18,8 +18,6 @@ In this schedule, team 1100 is in match 1 and match 4. In this case, when match 
 We also want to note that team 1100 has to switch alliance colors between matches 1 and 4 (Red to Blue). This is something we would want to notify them about, in case they need to switch bumpers.
 
 This program pulls the match schedule from [The Blue Alliance](https://www.thebluealliance.com/) and generates an updated schedule that notes all the information to make queuing easier and eliminate the manual work of marking each back-to-back match.
-
-We can note all back-to-back matches that are 3 matches out, as shown in the example above, or 4 matches out. With 4 matches out, we can stage these teams near the field and move them up as needed, if the travel time to the pits is too far to send them back, such as championships.
 
 ## Build
 

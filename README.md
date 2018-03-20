@@ -24,9 +24,22 @@ This program pulls the match schedule from [The Blue Alliance](https://www.thebl
 This program requires:
 
 * [Python 2.7](https://www.python.org/download/releases/2.7/)
+* A [Read API key](https://www.thebluealliance.com/apidocs#apiv3) for The Blue Alliance
 * An internet connection
 
 ## Execution
+
+#### API Key
+
+To get access to The Blue Alliance, you will need to generate a Read API key. The documentation to do so is [here](https://www.thebluealliance.com/apidocs#apiv3). With the Read API key, save it to a file named `key.json` with the following contents:
+
+```
+{
+	"key": "<your Read API key>"
+}
+```
+
+This file will get loaded and the key will be used to retrieve the match schedule from The Blue Alliance.
 
 #### Arguments
 

@@ -4,12 +4,14 @@ import csv
 import os
 
 # The Blue Alliance parameters for sending requests
-URL = 'http://www.thebluealliance.com/api/v2'
+URL = 'http://www.thebluealliance.com/api/v3'
 EVENT_URL = '/event/'
 MATCHES_URL = '/matches'
 HEADER_KEY = 'X-TBA-App-Id'
+READ_KEY = 'X-TBA-Auth-Key'
 HEADER_VAL = 'frc:back-to-back-queuer:v01'
 QUALIFICATION_ID = 'qm'
+KEY_FILE = 'key.json'
 
 def file(path):
     """
@@ -22,19 +24,20 @@ def file(path):
     return os.path.abspath(path)
 
 
-def get_event_matches(event_id):
+def get_event_matches(event_id, read_key):
     """
     Sends the request to The Blue Alliance for all the matches at the specified event.
 
     Arguments:
         event_id: The unique event ID from The Blue Alliance.
+        read_key: The API key to read from The Blue Alliance.
     Returns:
         A JSON object of the response
     """
     request_url = URL + EVENT_URL + event_id + MATCHES_URL
 
     # Add headers for The Blue Alliance application parameters
-    response = requests.get(request_url, headers={HEADER_KEY: HEADER_VAL})
+    response = requests.get(request_url, headers={HEADER_KEY: HEADER_VAL, READ_KEY: read_key})
     json_response = response.json()
     
     return json_response
@@ -154,15 +157,22 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--max_matches_out', type=int, help='Maximum number of matches to search out from a given match. In other words, the largest number of matches between two matches that considers them "back-to-back" for queuing purposes.')
     args = parser.parse_args()
 
+    # Load API key
+    read_key = None
+
+    with open(KEY_FILE) as key_json_file:
+        key_obj = json.load(key_json_file)
+        read_key = key_obj['key']
+
     # Get matches
-    json_response = get_event_matches(args.event_id)
+    json_response = get_event_matches(args.event_id, read_key)
     matches = []
 
     # Filter and keep only qualification matches
     for match in json_response:
         if match['comp_level'] == QUALIFICATION_ID:
             # Track match number and all teams
-            matches.append(Match(match['match_number'], match['alliances']['blue']['teams'], match['alliances']['red']['teams']))
+            matches.append(Match(match['match_number'], match['alliances']['blue']['team_keys'], match['alliances']['red']['team_keys']))
             
     # Sort by match number
     matches = sorted(matches, key=lambda x : x.match_num, reverse=False)

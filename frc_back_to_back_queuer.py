@@ -7,10 +7,14 @@ import os
 URL = 'http://www.thebluealliance.com/api/v3'
 EVENT_URL = '/event/'
 MATCHES_URL = '/matches'
+TEAM_KEYS_URL = '/teams/keys'
+
 HEADER_KEY = 'X-TBA-App-Id'
 READ_KEY = 'X-TBA-Auth-Key'
 HEADER_VAL = 'frc:back-to-back-queuer:v01'
+
 QUALIFICATION_ID = 'qm'
+TEAM_NUM_PREFIX_LEN = 3
 KEY_FILE = 'key.json'
 
 def file(path):
@@ -37,9 +41,35 @@ def get_event_matches(event_id, read_key):
     request_url = URL + EVENT_URL + event_id + MATCHES_URL
 
     # Add headers for The Blue Alliance application parameters
-    response = requests.get(request_url, headers={HEADER_KEY: HEADER_VAL, READ_KEY: read_key})
+    return send_api_request(request_url, {HEADER_KEY: HEADER_VAL, READ_KEY: read_key})
+
+
+def get_event_teams(event_id, read_key):
+    """
+    Sends the request to The Blue Alliance for all the teams at the specified event.
+
+    Arguments:
+        event_id: The unique event ID from The Blue Alliance.
+        read_key: The API key to read from The Blue Alliance.
+    Returns:
+        A JSON object of the response
+    """
+    request_url = URL + EVENT_URL + event_id + TEAM_KEYS_URL
+    return send_api_request(request_url, {HEADER_KEY: HEADER_VAL, READ_KEY: read_key})
+
+
+def send_api_request(request_url, headers):
+    """
+    Sends the request to The Blue Alliance for the given request and headers.
+
+    Arguments:
+        request_url: The request URL to send the request to.
+        headers: The header parameters to send with the request.
+    Returns:
+        A JSON object of the response
+    """
+    response = requests.get(request_url, headers)
     json_response = response.json()
-    
     return json_response
 
 
@@ -81,10 +111,10 @@ class Match(object):
         # Put all teams in dictionary by alliance and position
         # Clean team numbers to remove and prefixes from The Blue Alliance
         for i in range(len(blue_teams)):
-            self.teams['B{}'.format(i + 1)] = {'team': blue_teams[i][3:], 'next_match': None}
+            self.teams['B{}'.format(i + 1)] = {'team': blue_teams[i][TEAM_NUM_PREFIX_LEN:], 'next_match': None}
         
         for i in range(len(red_teams)):
-            self.teams['R{}'.format(i + 1)] = {'team': red_teams[i][3:], 'next_match': None}
+            self.teams['R{}'.format(i + 1)] = {'team': red_teams[i][TEAM_NUM_PREFIX_LEN:], 'next_match': None}
     
     def __str__(self):
         """
@@ -153,6 +183,31 @@ def update_back_to_back_from_next_alliance(current_team, next_match, match_index
     return False
 
 
+def update_last_match_for_teams(all_matches, total_match_count, teams):
+    """
+    Updates each team in the match schedule with their last match of the event.
+
+    Arguments:
+        all_matches: The list of all Match objects in the qualification schedule.
+        total_match_count: The total number of matches in the qualification schedule.
+        teams: The dictionary of team number to counts, which by default are 0.
+    """
+
+    # Go through schedule in reverse
+    for match_index in range(total_match_count - 1, 0, -1):
+        current_match = all_matches[match_index]
+
+        for team in current_match.teams.values():
+            # If this is first visit of team number, mark as last match
+            if teams[team['team']] == 0:
+                team['next_match'] = 'L'
+            teams[team['team']] = teams[team['team']] + 1
+
+        # If the second to last match has not been visited for at least one team, keep going
+        if not any(val == 1 for val in teams.values()):
+            break
+
+
 if __name__ == '__main__':
     from argparse import ArgumentParser
 
@@ -186,6 +241,16 @@ if __name__ == '__main__':
     # Find back-to-back matches for all teams in each match
     for index in range(matches_count):
         search_alliance_teams(matches, matches_count, matches[index], args.max_matches_out)
+
+    # Find the last match of each team
+    teams_json_response = get_event_teams(args.event_id, read_key)
+    event_teams = dict()
+
+    for team in teams_json_response:
+        team_num = team[TEAM_NUM_PREFIX_LEN:]
+        event_teams[team_num] = 0
+
+    update_last_match_for_teams(matches, matches_count, event_teams)
 
     # Write new schedule to TSV file
     with open(args.output_file, "wb") as tsv_file:

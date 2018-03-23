@@ -120,12 +120,14 @@ def search_alliance_teams(all_matches, total_match_count, current_match, max_mat
         for next_index in range(1, max_matches_out + 1):
             next_match_index = index + next_index
 
-            # If we searched too far in the schedule or out of bounds
+            # If there are no more matches to check, stop checking further
             if next_match_index >= total_match_count:
-                continue
+                break
             
             next_match = all_matches[next_match_index]
-            update_back_to_back_from_next_alliance(team, next_match, next_index)
+            
+            if update_back_to_back_from_next_alliance(team, next_match, next_index):
+                break
 
 
 def update_back_to_back_from_next_alliance(current_team, next_match, match_index_out):
@@ -137,7 +139,7 @@ def update_back_to_back_from_next_alliance(current_team, next_match, match_index
         next_match: The Match object for the succeeding match.
         match_index_out: The number of matches out that we are searching on this iteration.
     Returns:
-        N/A
+        True if next_match contained current_team, False otherwise.
     """
     for next_team_key in next_match.teams.keys():
         next_team_val = next_match.teams[next_team_key]
@@ -146,6 +148,9 @@ def update_back_to_back_from_next_alliance(current_team, next_match, match_index
         if current_team['team'] == next_team_val['team']:
             # Mark the match number, next alliance color, and number of matches out in the current match
             current_team['next_match'] = 'M{}:{}:+{}'.format(next_match.match_num, next_team_key, match_index_out)
+            return True
+
+    return False
 
 
 if __name__ == '__main__':

@@ -35,7 +35,7 @@ To get access to The Blue Alliance, you will need to generate a Read API key. Th
 
 ```
 {
-	"key": "<your Read API key>"
+    "key": "<your Read API key>"
 }
 ```
 
@@ -75,3 +75,16 @@ In this output, we have marked team 1100 in match 1 with additional information.
 * `match number` : The match number for the associated back-to-back match, noted with __M__ and then the match number.
 * `next alliance` : The next alliance color (__B__ or __R__) and driver station position (__1__, __2__, __3__).
 * `matches out` : The number of matches until the back-to-back match from this current match.
+
+Another example of the output is shown below:
+
+| Match Number |   Blue 1   |   Blue 2   |   Blue 3   |   Red 1   |   Red 2   |   Red 3   |
+|--------------|------------|------------|------------|-----------|-----------|-----------|
+|      80      |  6367 (L)  |  3623 (L)  |  6723 (L)  |  5813 (L) |  1991 (L) |  1350 (L) |
+
+In this output, we have marked each team with additional information. The format of this information is as follows:
+
+`<team number> (<indicator of last match>)`
+
+* `team number` : The FRC team number.
+* `indicator of last match` : The letter `L` indicates that this match is the last one for the specified team. This is useful for notifying teams when to go to inspection before elimination rounds.

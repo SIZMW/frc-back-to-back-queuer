@@ -67,7 +67,7 @@ An example of the output is shown below:
 |       3      |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
 |       4      |  1100  |  190   |  3236  |  1740 |  6367 |  4041 |
 |     ...      |  ...   |  ...   |  ...   |  ...  |  ...  |  ...  |
-|      80      |  6367 (L)  |  3623 (L)  |  6723 (L)  |  5813 (L) |  1991 (L) |  1350 (L) |
+|      80      |  __6367 (L)__  |  __3623 (L)__  |  __6723 (L)__  |  __5813 (L)__ |  __1991 (L)__ |  __1350 (L)__ |
 
 In this output, we have marked team 1100 in match 1 and all the teams in match 80 with additional information. The format of this information is as follows:
 

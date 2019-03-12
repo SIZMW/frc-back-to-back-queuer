@@ -6,12 +6,12 @@ This program can be used to find and mark back-to-back matches in the qualificat
 
 For queuing, it's important to track teams that have back-to-back matches to keep the match flow running smoothly, and to prevent teams from leaving the field if they are needed back in the match queue. Most events will keep at least 2 matches queued behind the match currently playing, and some will keep 3 matches if the distance to the pits is too far. An example of a qualification schedule is shown below:
 
-| Match Number | Blue 1 | Blue 2 | Blue 3 | Red 1 | Red 2 | Red 3 |
-|--------------|--------|--------|--------|-------|-------|-------|
-|       1      |  2523  |  1519  |  2370  |  4048 |  __1100__ |  2262 |
-|       2      |  2342  |  1277  |  501   |  3466 |  3780 |  126  |
-|       3      |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
-|       4      |  __1100__  |  190   |  3236  |  1740 |  6367 |  4041 |
+| Match |    Time   | Blue 1 | Blue 2 | Blue 3 | Red 1 | Red 2 | Red 3 |
+|-------|-----------|--------|--------|--------|-------|-------|-------|
+|   1   | Thu 11:00 |  2523  |  1519  |  2370  |  4048 |  __1100__ |  2262 |
+|   2   | Thu 11:07 |  2342  |  1277  |  501   |  3466 |  3780 |  126  |
+|   3   | Thu 11:14 |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
+|   4   | Thu 11:21 |  __1100__  |  190   |  3236  |  1740 |  6367 |  4041 |
 
 In this schedule, team 1100 is in match 1 and match 4. In this case, when match 1 ends, match 4 will be brought up into queue, and so team 1100 will be queued again. We want to prevent them from leaving the field because they are needed right away in queue.
 
@@ -60,14 +60,14 @@ You can run `python frc_back_to_back_queuer.py -h` for further help.
 
 An example of the output is shown below:
 
-| Match Number | Blue 1 | Blue 2 | Blue 3 | Red 1 | Red 2 | Red 3 |
-|--------------|--------|--------|--------|-------|-------|-------|
-|       1      |  2523  |  1519  |  2370  |  4048 |  __1100 (M4:B1:+3)__ |  2262 |
-|       2      |  2342  |  1277  |  501   |  3466 |  3780 |  126  |
-|       3      |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
-|       4      |  1100  |  190   |  3236  |  1740 |  6367 |  4041 |
-|     ...      |  ...   |  ...   |  ...   |  ...  |  ...  |  ...  |
-|      80      |  __6367 (L)__  |  __3623 (L)__  |  __6723 (L)__  |  __5813 (L)__ |  __1991 (L)__ |  __1350 (L)__ |
+| Match |    Time   | Blue 1 | Blue 2 | Blue 3 | Red 1 | Red 2 | Red 3 |
+|-------|-----------|--------|--------|--------|-------|-------|-------|
+|   1   | Thu 11:00 |  2523  |  1519  |  2370  |  4048 |  __1100 (M4:B1:+3)__ |  2262 |
+|   2   | Thu 11:07 |  2342  |  1277  |  501   |  3466 |  3780 |  126  |
+|   3   | Thu 11:14 |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
+|   4   | Thu 11:21 |  1100  |  190   |  3236  |  1740 |  6367 |  4041 |
+|  ...  |    ...    |  ...   |  ...   |  ...   |  ...  |  ...  |  ...  |
+|   80  | Fri 12:17 |  __6367 (L)__  |  __3623 (L)__  |  __6723 (L)__  |  __5813 (L)__ |  __1991 (L)__ |  __1350 (L)__ |
 
 In this output, we have marked team 1100 in match 1 and all the teams in match 80 with additional information. The format of this information is as follows:
 
@@ -80,3 +80,5 @@ In this output, we have marked team 1100 in match 1 and all the teams in match 8
 * `match number` : The match number for the associated back-to-back match.
 * `next alliance` : The next alliance color (__B__ or __R__) and driver station position (__1__, __2__, __3__) for the associated back-to-back match.
 * `matches out` : The number of matches from this current match to the associated back-to-back match.
+
+__Note__: The _Time_ of each match is retrieved based on **your** timezone, not the event's timezone.

@@ -1,7 +1,7 @@
 import csv
 import os
 
-from match import Match
+from match import *
 from file_util import *
 from tba_api_requester import *
 from tba_constants import *
@@ -38,6 +38,10 @@ if __name__ == '__main__':
     # Find the last match of each team
     print 'Finding last matches per team...'
     update_last_match_for_all_teams(args.event_id, read_key, matches, matches_count)
+
+    # Find breaks within the schedule
+    print 'Finding breaks in the schedule...'
+    insert_schedule_breaks(matches, matches_count)
 
     # Write new schedule to TSV file
     with open(args.output_file, "wb") as tsv_file:

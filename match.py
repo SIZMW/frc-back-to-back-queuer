@@ -3,80 +3,9 @@ import datetime
 
 from tba_constants import *
 
-class Match(object):
-    """
-    This class represents a single match in the qualification schedule, with a match number and 3 blue alliance teams and 3 red alliance teams.
-    """
-    MATCH = 'match'
-    NEXT_MATCH = 'next_match'
-    TEAM = 'team'
-
-    match_num = -1
-    teams = None
-    match_time = None
-    match_time_str = None
-    
-    def __init__(self, match_num, match_time, blue_teams, red_teams):
-        """
-        Initializes the Match object from the keyword arguments.
-
-        Arguments:
-            match_num: The match number from the schedule.
-            match_time: The datetime object representing the time of the match.
-            blue_teams: The blue alliance in the match.
-            red_teams: The red alliance in the match.
-        """
-        self.match_num = match_num
-        self.teams = dict()
-        self.match_time = match_time
-        
-        # Put all teams in dictionary by alliance and position
-        # Clean team numbers to remove and prefixes from The Blue Alliance
-        for i in range(len(blue_teams)):
-            self.teams['B{}'.format(i + 1)] = Team(blue_teams[i][TEAM_NUM_PREFIX_LEN:], None)
-        
-        for i in range(len(red_teams)):
-            self.teams['R{}'.format(i + 1)] = Team(red_teams[i][TEAM_NUM_PREFIX_LEN:], None)
-    
-    def __str__(self):
-        """
-        Returns a string representation of this object.
-
-        Returns:
-            A string
-        """
-        return '{:2d} [{}]: Blue:{},{},{} | Red:{},{},{}'.format(
-            self.match_num,
-            self.match_time,
-            str(self.teams['B1']),
-            str(self.teams['B2']),
-            str(self.teams['B3']),
-            str(self.teams['R1']),
-            str(self.teams['R2']),
-            str(self.teams['R3']))
-
-    def __repr__(self):
-        """
-        Returns a representation of this object.
-
-        Returns:
-            A string
-        """
-        return str(self)
-
-    def get_match_time_str(self):
-        """
-        Returns a string representation of this match's start time.
-
-        Returns:
-            A formatted string
-        """
-
-        # Get day of week, hour, and minutes of the match
-        match_day = calendar.day_name[self.match_time.weekday()][0:3]
-        match_moment = '{:02d}:{:02d}'.format(self.match_time.hour, self.match_time.minute)
-        return '{} {}'.format(match_day, match_moment)
-
+MATCH_TYPE_BREAK = "BREAK"
+MATCH_TYPE_LUNCH = "LUNCH"
+MATCH_TYPE_GENERIC = "-----"
 
 class Team(object):
     """
@@ -129,3 +58,104 @@ class Team(object):
             A string
         """
         return str(self)
+
+
+class Match(object):
+    """
+    This class represents a single match in the qualification schedule, with a match number and 3 blue alliance teams and 3 red alliance teams.
+    """
+
+    match_num = -1
+    teams = None
+    match_time = None
+    match_time_str = None
+    
+    def __init__(self, match_num, match_time, blue_teams, red_teams):
+        """
+        Initializes the Match object from the keyword arguments.
+
+        Arguments:
+            match_num: The match number from the schedule.
+            match_time: The datetime object representing the time of the match.
+            blue_teams: The blue alliance in the match.
+            red_teams: The red alliance in the match.
+        """
+        self.match_num = match_num
+        self.teams = dict()
+        self.match_time = match_time
+        
+        # Put all teams in dictionary by alliance and position
+        # Clean team numbers to remove and prefixes from The Blue Alliance
+        for i in range(len(blue_teams)):
+            self.teams['B{}'.format(i + 1)] = Team(blue_teams[i], None)
+        
+        for i in range(len(red_teams)):
+            self.teams['R{}'.format(i + 1)] = Team(red_teams[i], None)
+    
+    def __str__(self):
+        """
+        Returns a string representation of this object.
+
+        Returns:
+            A string
+        """
+        return '{:2d} [{}]: Blue:{},{},{} | Red:{},{},{}'.format(
+            self.match_num,
+            self.match_time,
+            str(self.teams['B1']),
+            str(self.teams['B2']),
+            str(self.teams['B3']),
+            str(self.teams['R1']),
+            str(self.teams['R2']),
+            str(self.teams['R3']))
+
+    def __repr__(self):
+        """
+        Returns a representation of this object.
+
+        Returns:
+            A string
+        """
+        return str(self)
+
+    def get_match_time_str(self):
+        """
+        Returns a string representation of this match's start time.
+
+        Returns:
+            A formatted string
+        """
+
+        # Get day of week, hour, and minutes of the match
+        match_day = calendar.day_name[self.match_time.weekday()][0:3]
+        match_moment = '{:02d}:{:02d}'.format(self.match_time.hour, self.match_time.minute)
+        return '{} {}'.format(match_day, match_moment)
+
+
+class DummyMatch(Match):
+    """
+    This class represents a placeholder match record that can represent a placeholder or intermission during the qualification schedule.
+    """
+
+    match_type_str = None
+
+    def __init__(self, match_type_str):
+        """
+        Initializes the DummyMatch object from keyword arguments.
+
+        Arguments:
+            match_type_str: The constant match type string to represent the type of dummy match this is.
+        """
+
+        self.match_type_str = match_type_str
+        teams = [match_type_str, match_type_str, match_type_str]
+        super(DummyMatch, self).__init__(match_type_str, match_type_str, teams, teams)
+
+    def get_match_time_str(self):
+        """
+        Returns a string representation of this match's start time.
+
+        Returns:
+            A formatted string
+        """
+        return self.match_type_str

@@ -45,7 +45,7 @@ This file will get loaded and the key will be used to retrieve the match schedul
 
 To generate the schedule, run the program as follows:
 ```
-python frc_back_to_back_queuer.py -i <event ID> -o <output file> -m <match count>
+python main.py -i <event ID> -o <output file> -m <match count>
 ```
 
 The arguments are:
@@ -54,7 +54,7 @@ The arguments are:
 * `output file` : The file path to write the generated schedule, as a TSV file.
 * `match count` : The number of matches to consider for "back-to-back". This is commonly __4__ matches for most events.
 
-You can run `python frc_back_to_back_queuer.py -h` for further help.
+You can run `python main.py -h` for further help.
 
 #### Output
 

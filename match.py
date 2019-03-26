@@ -33,10 +33,10 @@ class Match(object):
         # Put all teams in dictionary by alliance and position
         # Clean team numbers to remove and prefixes from The Blue Alliance
         for i in range(len(blue_teams)):
-            self.teams['B{}'.format(i + 1)] = {Match.TEAM: blue_teams[i][TEAM_NUM_PREFIX_LEN:], Match.NEXT_MATCH: None}
+            self.teams['B{}'.format(i + 1)] = Team(blue_teams[i][TEAM_NUM_PREFIX_LEN:], None)
         
         for i in range(len(red_teams)):
-            self.teams['R{}'.format(i + 1)] = {Match.TEAM: red_teams[i][TEAM_NUM_PREFIX_LEN:], Match.NEXT_MATCH: None}
+            self.teams['R{}'.format(i + 1)] = Team(red_teams[i][TEAM_NUM_PREFIX_LEN:], None)
     
     def __str__(self):
         """
@@ -48,12 +48,12 @@ class Match(object):
         return '{:2d} [{}]: Blue:{},{},{} | Red:{},{},{}'.format(
             self.match_num,
             self.match_time,
-            self.get_team_str(self.teams['B1']),
-            self.get_team_str(self.teams['B2']),
-            self.get_team_str(self.teams['B3']),
-            self.get_team_str(self.teams['R1']),
-            self.get_team_str(self.teams['R2']),
-            self.get_team_str(self.teams['R3']))
+            str(self.teams['B1']),
+            str(self.teams['B2']),
+            str(self.teams['B3']),
+            str(self.teams['R1']),
+            str(self.teams['R2']),
+            str(self.teams['R3']))
 
     def __repr__(self):
         """
@@ -62,30 +62,7 @@ class Match(object):
         Returns:
             A string
         """
-        return '{:2d} [{}]: Blue:{},{},{} | Red:{},{},{}'.format(
-            self.match_num,
-            self.match_time,
-            self.get_team_str(self.teams['B1']),
-            self.get_team_str(self.teams['B2']),
-            self.get_team_str(self.teams['B3']),
-            self.get_team_str(self.teams['R1']),
-            self.get_team_str(self.teams['R2']),
-            self.get_team_str(self.teams['R3']))
-
-    def get_team_str(self, team):
-        """
-        Function to format the output strings for debugging and file output for each team and their "back-to-back" match.
-
-        Arguments:
-            team: The team object from the match.
-        Returns:
-            A formatted string
-        """
-        # If there is a back-to-back match
-        if team[Match.NEXT_MATCH] is not None:
-            return '{} ({})'.format(team[Match.TEAM], team[Match.NEXT_MATCH])
-        else:
-            return team[Match.TEAM]
+        return str(self)
 
     def get_match_time_str(self):
         """
@@ -99,3 +76,56 @@ class Match(object):
         match_day = calendar.day_name[self.match_time.weekday()][0:3]
         match_moment = '{:02d}:{:02d}'.format(self.match_time.hour, self.match_time.minute)
         return '{} {}'.format(match_day, match_moment)
+
+
+class Team(object):
+    """
+    This class represents a single team in a qualification match with a team number and information about the team's recent and future matches.
+    """
+
+    team_number = None
+    next_match_num = None
+    next_match_alliance = None
+    next_match_matches_out = None
+    is_last_match = False
+    is_back_to_back_related = False
+
+    def __init__(self, team_number, next_match_num, next_match_alliance=None, next_match_matches_out=None):
+        """
+        Initializes the Team object from the keyword arguments.
+
+        Arguments:
+            team_number: The team number for this team.
+            next_match_num: The match number for this team's next back to back match, if any.
+            next_match_alliance: The alliance color for this team's next back to back match, if any.
+            next_match_matches_out: The number of matches out to this team's next back to back match, if any.
+        """
+        self.team_number = team_number
+        self.next_match_num = next_match_num
+        self.next_match_alliance = next_match_alliance
+        self.next_match_matches_out = next_match_matches_out
+        self.is_last_match = False
+        self.is_back_to_back_related = False
+
+    def __str__(self):
+        """
+        Returns a string representation of this object.
+
+        Returns:
+            A string
+        """
+
+        return '{}{}{}{}'.format(
+            self.team_number,
+            ' (M{}:{}:+{})'.format(self.next_match_num, self.next_match_alliance, self.next_match_matches_out) if self.next_match_num else "",
+            "" if not self.is_last_match else " (L)",
+            "" if not self.is_back_to_back_related else " *")
+
+    def __repr__(self):
+        """
+        Returns a representation of this object.
+
+        Returns:
+            A string
+        """
+        return str(self)

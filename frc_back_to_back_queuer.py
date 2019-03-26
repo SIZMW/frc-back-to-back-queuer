@@ -60,9 +60,12 @@ def update_back_to_back_from_next_alliance(current_team, next_match, match_index
         next_team_val = next_match.teams[next_team_key]
 
         # If team exists in a back-to-back match
-        if current_team[Match.TEAM] == next_team_val[Match.TEAM]:
+        if current_team.team_number == next_team_val.team_number:
             # Mark the match number, next alliance color, and number of matches out in the current match
-            current_team[Match.NEXT_MATCH] = 'M{}:{}:+{}'.format(next_match.match_num, next_team_key, match_index_out)
+            current_team.next_match_num = next_match.match_num
+            current_team.next_match_alliance = next_team_key
+            current_team.next_match_matches_out = match_index_out
+            next_match.teams[next_team_key].is_back_to_back_related = True
             return True
 
     return False
@@ -104,9 +107,9 @@ def update_last_match_for_teams(all_matches, total_match_count, teams):
 
         for team in current_match.teams.values():
             # If this is first visit of team number, mark as last match
-            if teams[team[Match.TEAM]] == 0:
-                team[Match.NEXT_MATCH] = 'L'
-            teams[team[Match.TEAM]] = teams[team[Match.TEAM]] + 1
+            if teams[team.team_number] == 0:
+                team.is_last_match = True
+            teams[team.team_number] = teams[team.team_number] + 1
 
         # If the second to last match has not been visited for at least one team, keep going
         if not any(val == 1 for val in teams.values()):

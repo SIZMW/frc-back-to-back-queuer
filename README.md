@@ -65,11 +65,11 @@ An example of the output is shown below:
 |   1   | Thu 11:00 |  2523  |  1519  |  2370  |  4048 |  __1100 (M4:B1:+3)__ |  2262 |
 |   2   | Thu 11:07 |  2342  |  1277  |  501   |  3466 |  3780 |  126  |
 |   3   | Thu 11:14 |  5813  |  4987  |  5969  |  1350 |  3719 |  663  |
-|   4   | Thu 11:21 |  1100  |  190   |  3236  |  1740 |  6367 |  4041 |
+|   4   | Thu 11:21 |  __1100 \*__  |  190   |  3236  |  1740 |  6367 |  4041 |
 |  ...  |    ...    |  ...   |  ...   |  ...   |  ...  |  ...  |  ...  |
 |   80  | Fri 12:17 |  __6367 (L)__  |  __3623 (L)__  |  __6723 (L)__  |  __5813 (L)__ |  __1991 (L)__ |  __1350 (L)__ |
 
-In this output, we have marked team 1100 in match 1 and all the teams in match 80 with additional information. The format of this information is as follows:
+In this output, we have marked team 1100 in matches 1 and 4 and all the teams in match 80 with additional information. The format of this information is as follows:
 
 `<team number> (<information type indicator><match number>:<next alliance>:<matches out>)`
 
@@ -77,6 +77,7 @@ In this output, we have marked team 1100 in match 1 and all the teams in match 8
 * `information type indicator` : The indicators that can be here are as follows:
   * `M` indicates additional match information for a team's next back-to-back match. `match number`, `next alliance`, and `matches out` will appear in the additional information.
   * `L` indicates that this match is the last one for the specified team. This is useful for notifying teams when to go to inspection before elimination rounds and getting alliance selection representatives.
+  * `*` indicates that this team is being queued again from a _previous_ back to back match. This is useful for queuers to know if field queuers or robot pit queuers need to find this team.
 * `match number` : The match number for the associated back-to-back match.
 * `next alliance` : The next alliance color (__B__ or __R__) and driver station position (__1__, __2__, __3__) for the associated back-to-back match.
 * `matches out` : The number of matches from this current match to the associated back-to-back match.

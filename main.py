@@ -24,13 +24,19 @@ if __name__ == '__main__':
     read_key = load_api_key(KEY_FILE, BA_KEY)
 
     # Get matches
-    matches = generate_match_data(retrieve_event_match_data(args.event_id, read_key))
+    print 'Retrieving match data...'
+    raw_match_data = retrieve_event_match_data(args.event_id, read_key)
+
+    print 'Parsing match data...'
+    matches = generate_match_data(raw_match_data)
     matches_count = len(matches)
 
     # Find back-to-back matches for all teams in each match
+    print 'Searching for back to back matches...'
     search_all_alliance_teams(matches, matches_count, args.max_matches_out)
 
     # Find the last match of each team
+    print 'Finding last matches per team...'
     update_last_match_for_all_teams(args.event_id, read_key, matches, matches_count)
 
     # Write new schedule to TSV file
@@ -45,11 +51,11 @@ if __name__ == '__main__':
             writer.writerow([
                 match.match_num,
                 match.get_match_time_str(),
-                match.get_team_str(match.teams['R1']),
-                match.get_team_str(match.teams['R2']),
-                match.get_team_str(match.teams['R3']),
-                match.get_team_str(match.teams['B1']),
-                match.get_team_str(match.teams['B2']),
-                match.get_team_str(match.teams['B3'])])
+                str(match.teams['R1']),
+                str(match.teams['R2']),
+                str(match.teams['R3']),
+                str(match.teams['B1']),
+                str(match.teams['B2']),
+                str(match.teams['B3'])])
     
     print 'Wrote schedule to {}'.format(args.output_file)

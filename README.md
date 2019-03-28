@@ -76,7 +76,7 @@ In this output, we have marked team 1100 in matches 1 and 4 and all the teams in
 `<team number> <other specifier> (<information type indicator><match number>:<next alliance>:<matches out>)`
 
 * `team number` : The FRC team number.
-* `other specifier`: A specifier indicating the type of record for this match row. This can be `BREAK`, which indicates that this match row is a break in the schedule, either for lunch, day break, or some other intermission. If this is specified, no other additional information will be provided.
+* `other specifier` : A specifier indicating the type of record for this match row. This can be `BREAK`, which indicates that this match row is a break in the schedule, either for lunch, day break, or some other intermission. If this is specified, no other additional information will be provided.
 * `information type indicator` : The indicators that can be here are as follows:
   * `M` indicates additional match information for a team's next back-to-back match. `match number`, `next alliance`, and `matches out` will appear in the additional information.
   * `L` indicates that this match is the last one for the specified team. This is useful for notifying teams when to go to inspection before elimination rounds and getting alliance selection representatives.
